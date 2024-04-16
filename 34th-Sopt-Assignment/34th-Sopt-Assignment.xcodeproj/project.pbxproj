@@ -9,13 +9,24 @@
 /* Begin PBXBuildFile section */
 		2DFAE70C2BCCF31D006DE10C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DFAE70B2BCCF31D006DE10C /* AppDelegate.swift */; };
 		2DFAE70E2BCCF31D006DE10C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DFAE70D2BCCF31D006DE10C /* SceneDelegate.swift */; };
-		2DFAE7102BCCF31D006DE10C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DFAE70F2BCCF31D006DE10C /* ViewController.swift */; };
+		2DFAE7102BCCF31D006DE10C /* LoginViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DFAE70F2BCCF31D006DE10C /* LoginViewViewController.swift */; };
 		2DFAE7152BCCF31E006DE10C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2DFAE7142BCCF31E006DE10C /* Assets.xcassets */; };
 		2DFAE7182BCCF31E006DE10C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2DFAE7162BCCF31E006DE10C /* LaunchScreen.storyboard */; };
 		2DFAE7232BCCF31E006DE10C /* _4th_Sopt_AssignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DFAE7222BCCF31E006DE10C /* _4th_Sopt_AssignmentTests.swift */; };
 		2DFAE72D2BCCF31E006DE10C /* _4th_Sopt_AssignmentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DFAE72C2BCCF31E006DE10C /* _4th_Sopt_AssignmentUITests.swift */; };
 		2DFAE72F2BCCF31E006DE10C /* _4th_Sopt_AssignmentUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DFAE72E2BCCF31E006DE10C /* _4th_Sopt_AssignmentUITestsLaunchTests.swift */; };
 		2DFAE73D2BCCF37A006DE10C /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2DFAE73C2BCCF37A006DE10C /* SnapKit */; };
+		2DFAE7412BCD3CAD006DE10C /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DFAE7402BCD3CAD006DE10C /* UIFont.swift */; };
+		2DFAE74C2BCD45D4006DE10C /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DFAE7432BCD45D4006DE10C /* Pretendard-Light.otf */; };
+		2DFAE74D2BCD45D4006DE10C /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DFAE7442BCD45D4006DE10C /* Pretendard-Bold.otf */; };
+		2DFAE74E2BCD45D4006DE10C /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DFAE7452BCD45D4006DE10C /* Pretendard-Black.otf */; };
+		2DFAE74F2BCD45D4006DE10C /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DFAE7462BCD45D4006DE10C /* Pretendard-Medium.otf */; };
+		2DFAE7502BCD45D4006DE10C /* Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DFAE7472BCD45D4006DE10C /* Pretendard-ExtraBold.otf */; };
+		2DFAE7512BCD45D4006DE10C /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DFAE7482BCD45D4006DE10C /* Pretendard-ExtraLight.otf */; };
+		2DFAE7522BCD45D4006DE10C /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DFAE7492BCD45D4006DE10C /* Pretendard-Regular.otf */; };
+		2DFAE7532BCD45D4006DE10C /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DFAE74A2BCD45D4006DE10C /* Pretendard-SemiBold.otf */; };
+		2DFAE7542BCD45D4006DE10C /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DFAE74B2BCD45D4006DE10C /* Pretendard-Thin.otf */; };
+		2DFAE7562BCD5055006DE10C /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DFAE7552BCD5055006DE10C /* WelcomeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,7 +50,7 @@
 		2DFAE7082BCCF31D006DE10C /* 34th-Sopt-Assignment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "34th-Sopt-Assignment.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DFAE70B2BCCF31D006DE10C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2DFAE70D2BCCF31D006DE10C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		2DFAE70F2BCCF31D006DE10C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		2DFAE70F2BCCF31D006DE10C /* LoginViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewViewController.swift; sourceTree = "<group>"; };
 		2DFAE7142BCCF31E006DE10C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2DFAE7172BCCF31E006DE10C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2DFAE7192BCCF31E006DE10C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -48,6 +59,17 @@
 		2DFAE7282BCCF31E006DE10C /* 34th-Sopt-AssignmentUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "34th-Sopt-AssignmentUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DFAE72C2BCCF31E006DE10C /* _4th_Sopt_AssignmentUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _4th_Sopt_AssignmentUITests.swift; sourceTree = "<group>"; };
 		2DFAE72E2BCCF31E006DE10C /* _4th_Sopt_AssignmentUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _4th_Sopt_AssignmentUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		2DFAE7402BCD3CAD006DE10C /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
+		2DFAE7432BCD45D4006DE10C /* Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
+		2DFAE7442BCD45D4006DE10C /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
+		2DFAE7452BCD45D4006DE10C /* Pretendard-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.otf"; sourceTree = "<group>"; };
+		2DFAE7462BCD45D4006DE10C /* Pretendard-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Medium.otf"; sourceTree = "<group>"; };
+		2DFAE7472BCD45D4006DE10C /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraBold.otf"; sourceTree = "<group>"; };
+		2DFAE7482BCD45D4006DE10C /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
+		2DFAE7492BCD45D4006DE10C /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
+		2DFAE74A2BCD45D4006DE10C /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
+		2DFAE74B2BCD45D4006DE10C /* Pretendard-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Thin.otf"; sourceTree = "<group>"; };
+		2DFAE7552BCD5055006DE10C /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,7 +123,10 @@
 			children = (
 				2DFAE70B2BCCF31D006DE10C /* AppDelegate.swift */,
 				2DFAE70D2BCCF31D006DE10C /* SceneDelegate.swift */,
-				2DFAE70F2BCCF31D006DE10C /* ViewController.swift */,
+				2DFAE7402BCD3CAD006DE10C /* UIFont.swift */,
+				2DFAE7422BCD45BF006DE10C /* Font */,
+				2DFAE70F2BCCF31D006DE10C /* LoginViewViewController.swift */,
+				2DFAE7552BCD5055006DE10C /* WelcomeViewController.swift */,
 				2DFAE7142BCCF31E006DE10C /* Assets.xcassets */,
 				2DFAE7162BCCF31E006DE10C /* LaunchScreen.storyboard */,
 				2DFAE7192BCCF31E006DE10C /* Info.plist */,
@@ -124,6 +149,22 @@
 				2DFAE72E2BCCF31E006DE10C /* _4th_Sopt_AssignmentUITestsLaunchTests.swift */,
 			);
 			path = "34th-Sopt-AssignmentUITests";
+			sourceTree = "<group>";
+		};
+		2DFAE7422BCD45BF006DE10C /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				2DFAE7452BCD45D4006DE10C /* Pretendard-Black.otf */,
+				2DFAE7442BCD45D4006DE10C /* Pretendard-Bold.otf */,
+				2DFAE7472BCD45D4006DE10C /* Pretendard-ExtraBold.otf */,
+				2DFAE7482BCD45D4006DE10C /* Pretendard-ExtraLight.otf */,
+				2DFAE7432BCD45D4006DE10C /* Pretendard-Light.otf */,
+				2DFAE7462BCD45D4006DE10C /* Pretendard-Medium.otf */,
+				2DFAE7492BCD45D4006DE10C /* Pretendard-Regular.otf */,
+				2DFAE74A2BCD45D4006DE10C /* Pretendard-SemiBold.otf */,
+				2DFAE74B2BCD45D4006DE10C /* Pretendard-Thin.otf */,
+			);
+			path = Font;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,7 +277,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DFAE7532BCD45D4006DE10C /* Pretendard-SemiBold.otf in Resources */,
+				2DFAE7512BCD45D4006DE10C /* Pretendard-ExtraLight.otf in Resources */,
+				2DFAE74F2BCD45D4006DE10C /* Pretendard-Medium.otf in Resources */,
+				2DFAE7542BCD45D4006DE10C /* Pretendard-Thin.otf in Resources */,
 				2DFAE7182BCCF31E006DE10C /* LaunchScreen.storyboard in Resources */,
+				2DFAE7502BCD45D4006DE10C /* Pretendard-ExtraBold.otf in Resources */,
+				2DFAE74D2BCD45D4006DE10C /* Pretendard-Bold.otf in Resources */,
+				2DFAE74C2BCD45D4006DE10C /* Pretendard-Light.otf in Resources */,
+				2DFAE7522BCD45D4006DE10C /* Pretendard-Regular.otf in Resources */,
+				2DFAE74E2BCD45D4006DE10C /* Pretendard-Black.otf in Resources */,
 				2DFAE7152BCCF31E006DE10C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -262,7 +312,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DFAE7102BCCF31D006DE10C /* ViewController.swift in Sources */,
+				2DFAE7412BCD3CAD006DE10C /* UIFont.swift in Sources */,
+				2DFAE7562BCD5055006DE10C /* WelcomeViewController.swift in Sources */,
+				2DFAE7102BCCF31D006DE10C /* LoginViewViewController.swift in Sources */,
 				2DFAE70C2BCCF31D006DE10C /* AppDelegate.swift in Sources */,
 				2DFAE70E2BCCF31D006DE10C /* SceneDelegate.swift in Sources */,
 			);
