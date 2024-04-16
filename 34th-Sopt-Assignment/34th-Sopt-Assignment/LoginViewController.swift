@@ -10,6 +10,9 @@ import UIKit
 import SnapKit
 
 final class LoginViewController: UIViewController {
+    // MARK: - Properties
+    var nickname: String?
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "TVING ID 로그인"
@@ -119,6 +122,7 @@ final class LoginViewController: UIViewController {
         return button
     }()
     
+    // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
@@ -126,6 +130,7 @@ final class LoginViewController: UIViewController {
         setLayout()
     }
 
+    // MARK: - SetLayout
     private func setLayout() {
         [titleLabel, idTextField, passwordTextField, loginButton, findIdButton, bulkHeadView, findPasswordButton, noAccountLabel, createAccountButton].forEach {
             self.view.addSubview($0)
@@ -179,6 +184,8 @@ final class LoginViewController: UIViewController {
             $0.width.equalTo(128)
         }
     }
+    
+    // MARK: - Action
     private func updateLoginButtonState() {
         let idIsNotEmpty = !(idTextField.text?.isEmpty ?? true)
         let passwordIsNotEmpty = !(passwordTextField.text?.isEmpty ?? true)
@@ -219,7 +226,14 @@ final class LoginViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     @objc private func createAccountButtonDidTap() {
+        let createAccountVC = CreateAccountViewController()
+        createAccountVC.modalPresentationStyle = .custom
+        createAccountVC.transitioningDelegate = self
+        createAccountVC.saveNickName = { [weak self] receivedNickname in
+            self?.nickname = receivedNickname
+        }
         
+        self.present(createAccountVC, animated: true)
     }
     @objc private func findIdButtonDidTap() {
         
@@ -230,16 +244,17 @@ final class LoginViewController: UIViewController {
 
     private func pushToWelcomeVC() {
         let welcomeViewController = WelcomeViewController()
-        welcomeViewController.completionHandler = { [weak self] id in
-            guard let self else { return }
-            self.idTextField.text = "\(id)"
+        
+        if let nickname = nickname {
+            welcomeViewController.setLabelText(id: nickname)
+        } else {
+            welcomeViewController.setLabelText(id: idTextField.text)
         }
-        welcomeViewController.setLabelText(id: idTextField.text)
         self.navigationController?.pushViewController(welcomeViewController, animated: true)
     }
 }
 
-
+// MARK: - UITextFieldDelegate
 extension LoginViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.layer.borderColor = UIColor.subLightGray.cgColor
@@ -313,3 +328,9 @@ extension LoginViewController: UITextFieldDelegate {
 
 
  
+//MARK: - UIViewControllerTransitioningDelegate
+extension LoginViewController: UIViewControllerTransitioningDelegate {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+            return ModalPresentationController(presentedViewController: presented, presenting: presenting)
+        }
+}

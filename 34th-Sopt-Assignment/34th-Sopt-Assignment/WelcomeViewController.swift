@@ -11,10 +11,7 @@ import UIKit
 import SnapKit
 
 final class WelcomeViewController: UIViewController {
-    
-    typealias handler = ((String) -> (Void))
-    var completionHandler: handler?
-    
+    // MARK: - Properties
     var id: String?
     
     private let logoImageView: UIImageView = {
@@ -46,7 +43,7 @@ final class WelcomeViewController: UIViewController {
         return button
     }()
 
-    
+    // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
@@ -54,6 +51,8 @@ final class WelcomeViewController: UIViewController {
         setLayout()
         bindID()
     }
+    
+    // MARK: - SetLayout
     private func setLayout() {
         [logoImageView, welcomeLabel, goMainButton].forEach {
             self.view.addSubview($0)
@@ -75,20 +74,15 @@ final class WelcomeViewController: UIViewController {
         }
     }
     
+    // MARK: - Action
     @objc private func goMainButtonDidTap() {
         print("홈으로")
     }
-    @objc private func reLoginButtonDidTap() {
-        guard let id else { return }
-            completionHandler?(id)
-            self.navigationController?.popViewController(animated: true)
-    }
-    
     private func bindID() {
         guard let idText = id else { return }
         self.welcomeLabel.text = "\(idText)님 \n반가워요!"
     }
     func setLabelText(id: String?) {
-           self.id = id
-       }
+        self.id = id
+    }
 }
