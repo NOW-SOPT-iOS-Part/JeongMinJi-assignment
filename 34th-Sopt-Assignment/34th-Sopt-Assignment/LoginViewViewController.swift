@@ -200,7 +200,23 @@ final class LoginViewController: UIViewController {
         updateLoginButtonState()
     }
     @objc private func loginButtonDidTap() {
-        pushToWelcomeVC()
+        if isValidEmail(idTextField.text) {
+            pushToWelcomeVC()
+        } else {
+            showEmailAlert()
+        }
+    }
+    private func isValidEmail(_ email: String?) -> Bool {
+        guard let email = email else { return false }
+        let emailRegEx = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+        let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailPred.evaluate(with: email)
+    }
+    
+    private func showEmailAlert() {
+        let alert = UIAlertController(title: "이메일 오류", message: "유효한 이메일 형태로 입력해주세요.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "예", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     @objc private func createAccountButtonDidTap() {
         
