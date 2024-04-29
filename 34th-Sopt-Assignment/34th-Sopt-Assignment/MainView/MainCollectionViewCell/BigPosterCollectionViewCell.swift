@@ -47,8 +47,7 @@ final class BigPosterCollectionViewCell: UICollectionViewCell {
         moviePosterShadowImageView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview().inset(-4)
             $0.height.equalTo(moviePosterShadowImageView.snp.width).multipliedBy(94.0 / 375.0)
-        }
-        
+        }   
     }
 }
 

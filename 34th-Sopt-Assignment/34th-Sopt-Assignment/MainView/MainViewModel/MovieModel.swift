@@ -5,7 +5,6 @@
 //  Created by 정민지 on 4/21/24.
 //
 
-import Foundation
 import UIKit
 
 struct MovieModel {

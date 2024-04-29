@@ -5,34 +5,46 @@
 //  Created by 정민지 on 4/21/24.
 //
 
-import Foundation
 import UIKit
 
-final class MainViewController: UIViewController, UICollectionViewDelegate {
+final class MainViewController: UIViewController {
     // MARK: - Properties
-    private let scrollView: UIScrollView = {
+    var mainLogoHeaderView = MainLogoHeaderView()
+    
+    private var mainHeaderSegmentedControl: MainHeaderSegmentedControl!
+    
+    private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
-        
+        scrollView.delegate = self
         return scrollView
     }()
-    private let contentsView = UIView()
+    
+    private var stackView = UIStackView()
     
     private let collectionView = UICollectionView(
         frame: .zero,
         collectionViewLayout: .init())
+    
+    private var mainStickyHeaderViewTopConstraint = NSLayoutConstraint()
+    
+    private var scrollViewTopConstraint = NSLayoutConstraint()
+    
+    private var mainTableViewHeightConstraint = NSLayoutConstraint()
     
     private var poseterData = PoseterModel.dummy() {
         didSet {
             self.collectionView.reloadData()
         }
     }
+    
     private var movieData = MovieModel.dummy() {
         didSet {
             self.collectionView.reloadData()
         }
     }
+    
     private var liveData = LiveModel.dummy() {
         didSet {
             self.collectionView.reloadData()
@@ -42,40 +54,67 @@ final class MainViewController: UIViewController, UICollectionViewDelegate {
     // MARK: - viewDidLoad
     override func viewDidLoad() {
         view.backgroundColor = .black
-        
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+
+        setSegmentedControlLayout()
         setLayout()
         setupCollectionView()
     }
-    // MARK: - SetLayout
     
+    
+    // MARK: - SetLayout
     private func setLayout() {
-        self.view.addSubview(collectionView)
-//        self.view.addSubview(scrollView)
-//        scrollView.addSubview(contentsView)
-//        contentsView.addSubview(collectionView)
-//        
-//        scrollView.snp.makeConstraints {
-//           $0.edges.equalToSuperview()
-//        }
-//        contentsView.snp.makeConstraints {
-//            $0.edges.equalTo(scrollView)
-//        }
+        view.addSubview(scrollView)
+        scrollView.addSubview(collectionView)
+        view.addSubview(mainHeaderSegmentedControl)
+        view.addSubview(mainLogoHeaderView)
+        
+        
+        mainLogoHeaderView.translatesAutoresizingMaskIntoConstraints = false
+        mainHeaderSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        
+        mainLogoHeaderView.snp.makeConstraints {
+            $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.height.equalTo(59)
+        }
+        mainHeaderSegmentedControl.snp.makeConstraints {
+            $0.top.equalTo(mainLogoHeaderView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(41)
+        }
+        scrollView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalToSuperview()
+        }
         collectionView.snp.makeConstraints {
-//            $0.top.equalTo(contentsView.snp.top)
-//            $0.bottom.equalTo(contentsView.snp.bottom)
-//            $0.leading.trailing.equalToSuperview().inset(12)
-//            $0.height.equalTo(800)
-            $0.edges.equalToSuperview()
-           
+            $0.top.equalToSuperview()
+            $0.width.bottom.equalTo(scrollView)
+            $0.height.equalTo(calculateCellHeight())
         }
     }
-    // MARK: - Action
+    private func setSegmentedControlLayout() {
+        let items = ["홈", "실시간", "TV프로그램", "영화", "파라마운트+"]
+        let underbarInfo = UnderbarInfo(height: 3.0, barColor: .white, backgroundColor: .clear)
+        
+        
+        mainHeaderSegmentedControl = MainHeaderSegmentedControl(items: items, underbarInfo: underbarInfo)
+    }
+    
     
     //MARK: -Helpers
-    private func setupCollectionView() {
-        collectionView.delegate = self
-        collectionView.dataSource = self
+    private func calculateCellHeight() -> CGFloat {
+        let sectionSpacing: CGFloat = 22
+        let widthFraction = view.bounds.width
+        let heightMultiplier = CGFloat(498.0 / 375.0)
+        let bigPosterCellHeight: CGFloat = widthFraction * heightMultiplier
+        let movieCellHeight: CGFloat = 163
+        let headerCellHeight: CGFloat = 36
+        let footerCellHeight: CGFloat = 148
+        let liveCellHeight: CGFloat = 134
         
+        return bigPosterCellHeight + movieCellHeight * 3 + liveCellHeight + headerCellHeight * 4 + sectionSpacing * 4 + footerCellHeight * 2
+    }
+    
+    private func setupCollectionView() {
         collectionView.register(
             BigPosterCollectionViewCell.self,
             forCellWithReuseIdentifier: BigPosterCollectionViewCell.identifier)
@@ -90,15 +129,20 @@ final class MainViewController: UIViewController, UICollectionViewDelegate {
             MovieHeaderCollectionReusableView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: MovieHeaderCollectionReusableView.identifier)
+        
+        collectionView.register(
+            BigPosterCollectionViewReusableView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+            withReuseIdentifier: BigPosterCollectionViewReusableView.identifier)
         collectionView.register(
             MovieFooterCollectionReusableView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
             withReuseIdentifier: MovieFooterCollectionReusableView.identifier)
-
         
         collectionView.collectionViewLayout = createLayout()
-        
         collectionView.backgroundColor = .black
+        collectionView.delegate = self
+        collectionView.dataSource = self
     }
     
     private func createLayout() -> UICollectionViewCompositionalLayout {
@@ -106,16 +150,16 @@ final class MainViewController: UIViewController, UICollectionViewDelegate {
         config.interSectionSpacing = 22
         return UICollectionViewCompositionalLayout(
             sectionProvider: { [weak self] (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
-            guard let section = MainViewSection(rawValue: sectionIndex) else { return nil }
-            switch section {
-            case .bigMoviePoster:
-                return self?.createBigPosterSection()
-            case .recommendInTiving, .popularSeries, .mysteriousMovie:
-                return self?.createMovieSection(for: section)
-            case .popularLiveChannel:
-                return self?.createLiveSection()
-            }
-        }, configuration: config)
+                guard let section = MainViewSection(rawValue: sectionIndex) else { return nil }
+                switch section {
+                case .bigMoviePoster:
+                    return self?.createBigPosterSection()
+                case .recommendInTiving, .popularSeries, .mysteriousMovie:
+                    return self?.createMovieSection(for: section)
+                case .popularLiveChannel:
+                    return self?.createLiveSection()
+                }
+            }, configuration: config)
     }
     private func createBigPosterSection() -> NSCollectionLayoutSection {
         let widthFraction = CGFloat(1.0)
@@ -134,7 +178,17 @@ final class MainViewController: UIViewController, UICollectionViewDelegate {
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPaging
-
+        
+        let footerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(36))
+        let footer = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: footerSize,
+            elementKind: UICollectionView.elementKindSectionFooter,
+            alignment: .bottom)
+        
+        section.boundarySupplementaryItems = [footer]
+        
         return section
     }
     private func createMovieSection(for sectionType: MainViewSection) -> NSCollectionLayoutSection {
@@ -162,18 +216,18 @@ final class MainViewController: UIViewController, UICollectionViewDelegate {
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top)
         
-        section.boundarySupplementaryItems = [header]
+        let footerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(148))
+        let footer = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: footerSize,
+            elementKind: UICollectionView.elementKindSectionFooter,
+            alignment: .bottom)
         
         if sectionType == .popularSeries {
-            let footerSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .estimated(148))
-            let footer = NSCollectionLayoutBoundarySupplementaryItem(
-                layoutSize: footerSize,
-                elementKind: UICollectionView.elementKindSectionFooter,
-                alignment: .bottom)
-            
-            section.boundarySupplementaryItems = [footer]
+            section.boundarySupplementaryItems = [header, footer]
+        } else {
+            section.boundarySupplementaryItems = [header]
         }
         return section
     }
@@ -203,19 +257,20 @@ final class MainViewController: UIViewController, UICollectionViewDelegate {
             alignment: .top)
         
         section.boundarySupplementaryItems = [header]
-
+        
         return section
     }
 }
 
 
-//MARK: - UICollectionViewDataSource
-extension MainViewController: UICollectionViewDataSource {
+//MARK: - UICollectionViewDataSource, UICollectionViewDelegate
+extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 5
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0:
             return poseterData.count
@@ -286,16 +341,73 @@ extension MainViewController: UICollectionViewDataSource {
             return headerView
             
         case UICollectionView.elementKindSectionFooter:
-            guard sectionType == .popularSeries, let footerView = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: MovieFooterCollectionReusableView.identifier,
-                for: indexPath) as? MovieFooterCollectionReusableView else {
+            switch MainViewSection(rawValue: indexPath.section) {
+            case .bigMoviePoster:
+                guard let footerView = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: kind,
+                    withReuseIdentifier: BigPosterCollectionViewReusableView.identifier,
+                    for: indexPath) as? BigPosterCollectionViewReusableView else {
+                        return UICollectionReusableView()
+                    }
+                footerView.pageControl.numberOfPages = poseterData.count
+                let currentPageIndex = Int(collectionView.contentOffset.x / collectionView.frame.width)
+                footerView.pageControl.currentPage = currentPageIndex
+                return footerView
+                
+            case .popularSeries:
+                guard let footerView = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: kind,
+                    withReuseIdentifier: MovieFooterCollectionReusableView.identifier,
+                    for: indexPath) as? MovieFooterCollectionReusableView else {
+                    return UICollectionReusableView()
+                }
+                return footerView
+                
+            default:
                 return UICollectionReusableView()
             }
-            return footerView
             
         default:
             return UICollectionReusableView()
         }
     }
 }
+
+extension MainViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let scrollOffset = scrollView.contentOffset.y
+        if scrollView == self.scrollView {
+            UIView.animate(withDuration: 0.3) {
+                if scrollOffset >= 59 {
+                    self.mainHeaderSegmentedControl.snp.remakeConstraints { make in
+                        make.top.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
+                        make.height.equalTo(41)
+                    }
+                    self.mainLogoHeaderView.alpha = 0
+                } else {
+                    self.mainHeaderSegmentedControl.snp.remakeConstraints { make in
+                        make.top.equalTo(self.mainLogoHeaderView.snp.bottom)
+                        make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
+                        make.height.equalTo(41)
+                    }
+                    self.mainLogoHeaderView.alpha = 1
+                }
+                self.view.layoutIfNeeded()
+            }
+        }
+
+        if scrollView == collectionView {
+            
+            print("wlswl")
+            let pageWidth = collectionView.frame.size.width
+            let currentPage = Int((collectionView.contentOffset.x + pageWidth / 2) / pageWidth)
+            
+            if let footerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionFooter, at: IndexPath(item: 0, section: 0)) as? BigPosterCollectionViewReusableView {
+                footerView.pageControl.currentPage = currentPage
+                print("wlswl")
+                footerView.pageControlChanged(with: poseterData.count, currentPage: currentPage)
+            }
+        }
+    }
+}
+
