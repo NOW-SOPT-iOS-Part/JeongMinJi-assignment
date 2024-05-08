@@ -10,8 +10,6 @@ import UIKit
 
 final class  MovieCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
-    static let identifier = "MovieCollectionViewCell"
-    
     private let moviePosterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = .moviePoster1

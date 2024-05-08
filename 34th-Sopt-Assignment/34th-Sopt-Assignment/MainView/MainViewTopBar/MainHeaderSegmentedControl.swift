@@ -83,11 +83,11 @@ final class MainHeaderSegmentedControl: UISegmentedControl {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.backgroundColor = underbarInfo.barColor
             addSubview($0)
-            NSLayoutConstraint.activate([
-                $0.leadingAnchor.constraint(equalTo: leadingAnchor),
-                $0.bottomAnchor.constraint(equalTo: bottomAnchor),
-                $0.widthAnchor.constraint(equalToConstant: underbarWidth ?? 50),
-                $0.heightAnchor.constraint(equalToConstant: underbarInfo.height)])
+            $0.snp.makeConstraints {
+                $0.leading.bottom.equalToSuperview()
+                $0.width.equalTo(underbarWidth ?? 50)
+                $0.height.equalTo(underbarInfo.height)
+            }
             return $0
         }(UIView(frame: .zero))
     }

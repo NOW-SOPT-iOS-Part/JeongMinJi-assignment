@@ -69,10 +69,6 @@ final class MainViewController: UIViewController {
         view.addSubview(mainHeaderSegmentedControl)
         view.addSubview(mainLogoHeaderView)
         
-        
-        mainLogoHeaderView.translatesAutoresizingMaskIntoConstraints = false
-        mainHeaderSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        
         mainLogoHeaderView.snp.makeConstraints {
             $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             $0.height.equalTo(59)
@@ -117,27 +113,27 @@ final class MainViewController: UIViewController {
     private func setupCollectionView() {
         collectionView.register(
             BigPosterCollectionViewCell.self,
-            forCellWithReuseIdentifier: BigPosterCollectionViewCell.identifier)
+            forCellWithReuseIdentifier: BigPosterCollectionViewCell.className)
         collectionView.register(
             MovieCollectionViewCell.self,
-            forCellWithReuseIdentifier: MovieCollectionViewCell.identifier)
+            forCellWithReuseIdentifier: MovieCollectionViewCell.className)
         collectionView.register(
             LiveCollectionViewCell.self,
-            forCellWithReuseIdentifier: LiveCollectionViewCell.identifier)
+            forCellWithReuseIdentifier: LiveCollectionViewCell.className)
         
         collectionView.register(
             MovieHeaderCollectionReusableView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: MovieHeaderCollectionReusableView.identifier)
+            withReuseIdentifier: MovieHeaderCollectionReusableView.className)
         
         collectionView.register(
             BigPosterCollectionViewReusableView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
-            withReuseIdentifier: BigPosterCollectionViewReusableView.identifier)
+            withReuseIdentifier: BigPosterCollectionViewReusableView.className)
         collectionView.register(
             MovieFooterCollectionReusableView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
-            withReuseIdentifier: MovieFooterCollectionReusableView.identifier)
+            withReuseIdentifier: MovieFooterCollectionReusableView.className)
         
         collectionView.collectionViewLayout = createLayout()
         collectionView.backgroundColor = .black
@@ -288,19 +284,18 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         switch indexPath.section {
         case 0:
             guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: BigPosterCollectionViewCell.identifier,
+                withReuseIdentifier: BigPosterCollectionViewCell.className,
                 for: indexPath) as? BigPosterCollectionViewCell else { return UICollectionViewCell() }
-            cell.dataBind(poseterData[indexPath.item])
             return cell
         case 1, 3, 4:
             guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: MovieCollectionViewCell.identifier,
+                withReuseIdentifier: MovieCollectionViewCell.className,
                 for: indexPath) as? MovieCollectionViewCell else { return UICollectionViewCell() }
             cell.dataBind(movieData[indexPath.item])
             return cell
         case 2:
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: LiveCollectionViewCell.identifier,
+                withReuseIdentifier: LiveCollectionViewCell.className,
                 for: indexPath) as! LiveCollectionViewCell
             cell.dataBind(liveData[indexPath.item], index: indexPath.item + 1)
             return cell
@@ -319,7 +314,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
             guard let sectionType = sectionType,
                   let headerView = collectionView.dequeueReusableSupplementaryView(
                     ofKind: kind,
-                    withReuseIdentifier: MovieHeaderCollectionReusableView.identifier,
+                    withReuseIdentifier: MovieHeaderCollectionReusableView.className,
                     for: indexPath) as? MovieHeaderCollectionReusableView else {
                 return UICollectionReusableView()
             }
@@ -345,19 +340,19 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
             case .bigMoviePoster:
                 guard let footerView = collectionView.dequeueReusableSupplementaryView(
                     ofKind: kind,
-                    withReuseIdentifier: BigPosterCollectionViewReusableView.identifier,
+                    withReuseIdentifier: BigPosterCollectionViewReusableView.className,
                     for: indexPath) as? BigPosterCollectionViewReusableView else {
                         return UICollectionReusableView()
                     }
+                footerView.delegate = self
                 footerView.pageControl.numberOfPages = poseterData.count
-                let currentPageIndex = Int(collectionView.contentOffset.x / collectionView.frame.width)
-                footerView.pageControl.currentPage = currentPageIndex
+                footerView.pageControl.currentPage = Int(collectionView.contentOffset.x / collectionView.frame.width)
                 return footerView
                 
             case .popularSeries:
                 guard let footerView = collectionView.dequeueReusableSupplementaryView(
                     ofKind: kind,
-                    withReuseIdentifier: MovieFooterCollectionReusableView.identifier,
+                    withReuseIdentifier: MovieFooterCollectionReusableView.className,
                     for: indexPath) as? MovieFooterCollectionReusableView else {
                     return UICollectionReusableView()
                 }
@@ -375,39 +370,45 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
 
 extension MainViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let scrollOffset = scrollView.contentOffset.y
         if scrollView == self.scrollView {
-            UIView.animate(withDuration: 0.3) {
-                if scrollOffset >= 59 {
-                    self.mainHeaderSegmentedControl.snp.remakeConstraints { make in
-                        make.top.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
-                        make.height.equalTo(41)
-                    }
-                    self.mainLogoHeaderView.alpha = 0
-                } else {
-                    self.mainHeaderSegmentedControl.snp.remakeConstraints { make in
-                        make.top.equalTo(self.mainLogoHeaderView.snp.bottom)
-                        make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
-                        make.height.equalTo(41)
-                    }
-                    self.mainLogoHeaderView.alpha = 1
-                }
-                self.view.layoutIfNeeded()
-            }
+            updateLogoAndHeaderPosition(scrollView)
         }
+    }
 
-        if scrollView == collectionView {
-            
-            print("wlswl")
-            let pageWidth = collectionView.frame.size.width
-            let currentPage = Int((collectionView.contentOffset.x + pageWidth / 2) / pageWidth)
-            
-            if let footerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionFooter, at: IndexPath(item: 0, section: 0)) as? BigPosterCollectionViewReusableView {
-                footerView.pageControl.currentPage = currentPage
-                print("wlswl")
-                footerView.pageControlChanged(with: poseterData.count, currentPage: currentPage)
+    private func updateLogoAndHeaderPosition(_ scrollView: UIScrollView) {
+        let scrollOffset = scrollView.contentOffset.y
+        UIView.animate(withDuration: 0.3) {
+            if scrollOffset >= 59 {
+                self.mainHeaderSegmentedControl.snp.remakeConstraints { make in
+                    make.top.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
+                    make.height.equalTo(41)
+                }
+                self.mainLogoHeaderView.alpha = 0
+            } else {
+                self.mainHeaderSegmentedControl.snp.remakeConstraints { make in
+                    make.top.equalTo(self.mainLogoHeaderView.snp.bottom)
+                    make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
+                    make.height.equalTo(41)
+                }
+                self.mainLogoHeaderView.alpha = 1
             }
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    private func updatePageControlForBigPosterSection(_ scrollView: UIScrollView) {
+        let pageWidth = collectionView.frame.size.width
+        let currentPage = Int((scrollView.contentOffset.x + pageWidth / 2) / pageWidth)
+
+        if let footerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionFooter, at: IndexPath(item: 0, section: 0)) as? BigPosterCollectionViewReusableView {
+            footerView.pageControl.currentPage = currentPage
         }
     }
 }
 
+extension MainViewController: BigPosterCollectionViewDelegate {
+    func didChangePage(to index: Int) {
+        let indexPath = IndexPath(item: index, section: 0)
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+    }
+}

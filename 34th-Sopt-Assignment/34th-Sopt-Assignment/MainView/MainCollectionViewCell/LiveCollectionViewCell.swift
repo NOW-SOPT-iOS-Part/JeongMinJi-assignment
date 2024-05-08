@@ -8,9 +8,7 @@
 import UIKit
 
 final class LiveCollectionViewCell: UICollectionViewCell {
-    // MARK: - Properties
-    static let identifier = "LiveCollectionViewCell"
-    
+    // MARK: - Properties    
     private let liveImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = .livePoster1
@@ -71,7 +69,7 @@ final class LiveCollectionViewCell: UICollectionViewCell {
         }
         liveImageView.snp.makeConstraints {
             $0.top.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(liveImageView.snp.width).multipliedBy(0.5)
         }
         numberLabel.snp.makeConstraints {
@@ -108,3 +106,5 @@ extension LiveCollectionViewCell {
 
     }
 }
+
+

@@ -9,8 +9,6 @@ import UIKit
 
 final class BigPosterCollectionViewCell: UICollectionViewCell {
     // MARK: - Properties
-    static let identifier = "BigPosterCollectionViewCell"
-    
     private let moviePosterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = .bigPoster1
@@ -42,17 +40,11 @@ final class BigPosterCollectionViewCell: UICollectionViewCell {
         }
 
         moviePosterImageView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
         moviePosterShadowImageView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview().inset(-4)
             $0.height.equalTo(moviePosterShadowImageView.snp.width).multipliedBy(94.0 / 375.0)
         }   
-    }
-}
-
-extension BigPosterCollectionViewCell {
-    func dataBind(_ itemData: PoseterModel) {
-        moviePosterImageView.image = itemData.posterImage
     }
 }

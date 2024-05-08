@@ -9,8 +9,6 @@ import UIKit
 
 final class MovieHeaderCollectionReusableView: UICollectionReusableView {
     // MARK: - Properties
-    static let identifier = "MovieHeaderCollectionReusableView"
-    
     var viewAllTapped: (() -> Void)?
     
     private let headerTitleLabel: UILabel = {

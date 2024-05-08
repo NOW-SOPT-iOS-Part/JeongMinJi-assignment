@@ -9,8 +9,6 @@ import UIKit
 
 final class MovieFooterCollectionReusableView: UICollectionReusableView {
     // MARK: - Properties
-    static let identifier = "MovieFooterCollectionReusableView"
-
     private let advertisementImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = .llo

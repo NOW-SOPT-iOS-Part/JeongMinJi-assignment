@@ -7,14 +7,19 @@
 
 import UIKit
 
+protocol BigPosterCollectionViewDelegate: AnyObject {
+    func didChangePage(to index: Int)
+}
+
 final class BigPosterCollectionViewReusableView: UICollectionReusableView {
     // MARK: - Properties
-    static let identifier = "BigPosterCollectionViewReusableView"
+    weak var delegate: BigPosterCollectionViewDelegate?
     
-    var pageControl: UIPageControl = {
+    lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.currentPageIndicatorTintColor = .white
         pageControl.pageIndicatorTintColor = .gray3
+        pageControl.addTarget(self, action: #selector(pageControlChanged), for: .valueChanged)
         
         return pageControl
     }()
@@ -41,9 +46,8 @@ final class BigPosterCollectionViewReusableView: UICollectionReusableView {
     }
     
     // MARK: - Action
-    func pageControlChanged(with numberOfPages: Int, currentPage: Int) {
-        pageControl.numberOfPages = numberOfPages
-        pageControl.currentPage = currentPage
+    @objc private func pageControlChanged() {
+        delegate?.didChangePage(to: pageControl.currentPage)
     }
 }
 
