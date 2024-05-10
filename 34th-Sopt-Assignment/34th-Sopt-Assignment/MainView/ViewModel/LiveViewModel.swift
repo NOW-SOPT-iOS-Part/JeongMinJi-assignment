@@ -29,7 +29,7 @@ class LiveViewModel {
         let dailyBoxOffice: Observable<[DailyBoxOfficeList]>
     }
     
-    // MARK: - Transformation method from Input to Output
+    // MARK: - Transformation
     func transform(_ input: Input) -> Output {
         let dailyBoxOffice = input.getDailyBoxOfficeTrigger
             .flatMapLatest { [weak self] request -> Observable<[DailyBoxOfficeList]> in
@@ -45,6 +45,7 @@ class LiveViewModel {
         return Output(dailyBoxOffice: dailyBoxOffice)
     }
     
+    // MARK: - API
     private func getDailyBoxOffice(targetDt: Int, itemPerPage: Int, multiMovieYn: String, repNationCd: String) -> Observable<[DailyBoxOfficeList]> {
         return Observable.create { observer in
             self.boxofficeManager.getDailyBoxOffice(key: "\(PrivacyInfoManager.moviekey)", targetDt: targetDt, itemPerPage: itemPerPage, multiMovieYn: multiMovieYn, repNationCd: repNationCd) { result in

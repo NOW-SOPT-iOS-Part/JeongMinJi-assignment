@@ -32,7 +32,7 @@ final class MainViewController: UIViewController {
     private let disposeBag = DisposeBag()
     
     // Data Sources
-    private var poseterData = PoseterModel.dummy()
+    private var poseterData = PosterModel.dummy()
     private var movieData = MovieModel.dummy()
     private var liveData = [DailyBoxOfficeList]()
     
