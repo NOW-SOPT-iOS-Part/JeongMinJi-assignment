@@ -106,4 +106,7 @@ iOSInjectionProject/
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
 
+# Ignore Privacy Info file
+34th-Sopt-Assignment/34th-Sopt-Assignment/Network/Foundation/PrivacyInfo.plist
+
 # End of https://www.toptal.com/developers/gitignore/api/xcode,cocoapods,swift

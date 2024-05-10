@@ -6,13 +6,12 @@
 //
 
 import UIKit
+import RxSwift
 
 final class MainViewController: UIViewController {
     // MARK: - Properties
     var mainLogoHeaderView = MainLogoHeaderView()
-    
     private var mainHeaderSegmentedControl: MainHeaderSegmentedControl!
-    
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.showsHorizontalScrollIndicator = false
@@ -20,36 +19,22 @@ final class MainViewController: UIViewController {
         scrollView.delegate = self
         return scrollView
     }()
-    
     private var stackView = UIStackView()
-    
     private let collectionView = UICollectionView(
         frame: .zero,
         collectionViewLayout: .init())
-    
     private var mainStickyHeaderViewTopConstraint = NSLayoutConstraint()
-    
     private var scrollViewTopConstraint = NSLayoutConstraint()
-    
     private var mainTableViewHeightConstraint = NSLayoutConstraint()
     
-    private var poseterData = PoseterModel.dummy() {
-        didSet {
-            self.collectionView.reloadData()
-        }
-    }
+    // ViewModel
+    private let liveViewModel = LiveViewModel()
+    private let disposeBag = DisposeBag()
     
-    private var movieData = MovieModel.dummy() {
-        didSet {
-            self.collectionView.reloadData()
-        }
-    }
-    
-    private var liveData = LiveModel.dummy() {
-        didSet {
-            self.collectionView.reloadData()
-        }
-    }
+    // Data Sources
+    private var poseterData = PoseterModel.dummy()
+    private var movieData = MovieModel.dummy()
+    private var liveData = [DailyBoxOfficeList]()
     
     // MARK: - viewDidLoad
     override func viewDidLoad() {
@@ -59,8 +44,8 @@ final class MainViewController: UIViewController {
         setSegmentedControlLayout()
         setLayout()
         setupCollectionView()
+        setupBinding()
     }
-    
     
     // MARK: - SetLayout
     private func setLayout() {
@@ -93,6 +78,22 @@ final class MainViewController: UIViewController {
         
         
         mainHeaderSegmentedControl = MainHeaderSegmentedControl(items: items, underbarInfo: underbarInfo)
+    }
+    
+    // MARK: - SetBinding
+    private func setupBinding() {
+        let trigger = Observable.just(BoxOfficeResult(date: 20240101, itemsPerPage: 6, multiMovieYn: "Y", repNationCd: "K"))
+        
+        let input = LiveViewModel.Input(getDailyBoxOfficeTrigger: trigger)
+        let output = liveViewModel.transform(input)
+        
+        output.dailyBoxOffice
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] data in
+                self?.liveData = data
+                self?.collectionView.reloadData()
+            })
+            .disposed(by: disposeBag)
     }
     
     

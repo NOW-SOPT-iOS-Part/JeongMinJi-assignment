@@ -97,14 +97,16 @@ final class LiveCollectionViewCell: UICollectionViewCell {
 
 
 extension LiveCollectionViewCell {
-    func dataBind(_ itemData: LiveModel, index: Int) {
-        liveImageView.image = itemData.posterImage
+    func dataBind(_ itemData: DailyBoxOfficeList, index: Int) {
         numberLabel.text = "\(index)"
-        channelLabel.text = itemData.channelTitle
-        subTitleLabel.text = itemData.subTitle
-        ratingLabel.text = "\(itemData.rating)%"
+        channelLabel.text = itemData.movieNm
+        subTitleLabel.text = itemData.openDt
+        ratingLabel.text = "\(itemData.audiChange)%"
 
     }
 }
+
+
+
 
 
