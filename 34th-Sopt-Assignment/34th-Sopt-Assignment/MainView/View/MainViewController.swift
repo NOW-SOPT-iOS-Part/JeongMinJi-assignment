@@ -326,7 +326,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
             case .recommendInTiving:
                 title = "티빙에서 꼭 봐야하는 콘텐츠"
             case .popularLiveChannel:
-                title = "인기 LIVE 채널"
+                title = "어제 인기 박스오피스"
             case .popularSeries:
                 title = "1화 무료! 파라마운트+ 인기 시리즈"
             case .mysteriousMovie:
