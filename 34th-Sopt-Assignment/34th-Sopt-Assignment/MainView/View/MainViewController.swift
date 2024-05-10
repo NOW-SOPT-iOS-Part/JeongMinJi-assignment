@@ -82,7 +82,8 @@ final class MainViewController: UIViewController {
     
     // MARK: - SetBinding
     private func setupBinding() {
-        let trigger = Observable.just(BoxOfficeResult(date: 20240101, itemsPerPage: 6, multiMovieYn: "Y", repNationCd: "K"))
+        let yesterdayDate = yesterdayDateFormattedKST()
+        let trigger = Observable.just(BoxOfficeResult(date: yesterdayDate, itemsPerPage: 6, multiMovieYn: "Y", repNationCd: "K"))
         
         let input = LiveViewModel.Input(getDailyBoxOfficeTrigger: trigger)
         let output = liveViewModel.transform(input)
@@ -411,5 +412,21 @@ extension MainViewController: BigPosterCollectionViewDelegate {
     func didChangePage(to index: Int) {
         let indexPath = IndexPath(item: index, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+    }
+}
+
+extension MainViewController {
+    func yesterdayDateFormattedKST() -> Int {
+        var calendar = Calendar.current
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul") ?? calendar.timeZone
+
+        let currentDate = Date()
+        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: currentDate) else { return 0 }
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = calendar.timeZone
+        dateFormatter.dateFormat = "yyyyMMdd"
+
+        return Int(dateFormatter.string(from: yesterday)) ?? 0
     }
 }
