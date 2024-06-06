@@ -18,16 +18,14 @@ final class BigPosterCollectionViewReusableView: UICollectionReusableView {
     lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.currentPageIndicatorTintColor = .white
-        pageControl.pageIndicatorTintColor = .gray3
+        pageControl.pageIndicatorTintColor = .gray
         pageControl.addTarget(self, action: #selector(pageControlChanged), for: .valueChanged)
-        
         return pageControl
     }()
     
     // MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setLayout()
     }
     
@@ -38,7 +36,6 @@ final class BigPosterCollectionViewReusableView: UICollectionReusableView {
     // MARK: - SetLayout
     private func setLayout() {
         self.addSubview(pageControl)
-        
         pageControl.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(-4)
             $0.top.equalToSuperview().inset(14)
@@ -49,5 +46,8 @@ final class BigPosterCollectionViewReusableView: UICollectionReusableView {
     @objc private func pageControlChanged() {
         delegate?.didChangePage(to: pageControl.currentPage)
     }
+    
+    func updatePageControl(currentPage: Int) {
+        pageControl.currentPage = currentPage
+    }
 }
-

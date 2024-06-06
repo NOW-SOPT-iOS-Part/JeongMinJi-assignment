@@ -14,7 +14,6 @@ struct UnderbarInfo {
   var backgroundColor: UIColor
 }
 
-
 final class MainHeaderSegmentedControl: UISegmentedControl {
     // MARK: - Properties    
     private lazy var underbar: UIView = makeUnderbar()

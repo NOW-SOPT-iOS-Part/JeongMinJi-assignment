@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ModalPresentationController: UIPresentationController {
+final class ModalPresentationController: UIPresentationController {
     // MARK: - Properties
     private lazy var backgroundView: UIView = {
         let view = UIView()

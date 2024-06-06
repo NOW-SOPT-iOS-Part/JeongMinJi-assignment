@@ -75,9 +75,9 @@ final class WelcomeViewController: UIViewController {
     
     // MARK: - Action
     @objc private func goMainButtonDidTap() {
-        let MainViewController = MainViewController()
-    
-        self.navigationController?.pushViewController(MainViewController, animated: true)
+        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+            sceneDelegate.showMainViewController()
+        }
     }
     private func bindID() {
         guard let idText = id else { return }

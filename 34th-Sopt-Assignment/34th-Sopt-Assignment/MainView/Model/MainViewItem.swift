@@ -18,7 +18,7 @@ enum MainViewSection: Int {
 enum MainViewItem {
     case bigMoviePoster(PosterModel)
     case recommendInTiving(MovieModel)
-    case popularLiveChannel(LiveViewModel)
+    case popularLiveChannel(DailyBoxOfficeModel)
     case popularSeries(MovieModel)
     case mysteriousMovie(MovieModel)
 }
