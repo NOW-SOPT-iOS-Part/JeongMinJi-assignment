@@ -6,13 +6,12 @@
 //
 
 import UIKit
+import RxSwift
 
 final class MainViewController: UIViewController {
     // MARK: - Properties
     var mainLogoHeaderView = MainLogoHeaderView()
-    
     private var mainHeaderSegmentedControl: MainHeaderSegmentedControl!
-    
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.showsHorizontalScrollIndicator = false
@@ -20,36 +19,22 @@ final class MainViewController: UIViewController {
         scrollView.delegate = self
         return scrollView
     }()
-    
     private var stackView = UIStackView()
-    
     private let collectionView = UICollectionView(
         frame: .zero,
         collectionViewLayout: .init())
-    
     private var mainStickyHeaderViewTopConstraint = NSLayoutConstraint()
-    
     private var scrollViewTopConstraint = NSLayoutConstraint()
-    
     private var mainTableViewHeightConstraint = NSLayoutConstraint()
     
-    private var poseterData = PoseterModel.dummy() {
-        didSet {
-            self.collectionView.reloadData()
-        }
-    }
+    // ViewModel
+    private let liveViewModel = LiveViewModel()
+    private let disposeBag = DisposeBag()
     
-    private var movieData = MovieModel.dummy() {
-        didSet {
-            self.collectionView.reloadData()
-        }
-    }
-    
-    private var liveData = LiveModel.dummy() {
-        didSet {
-            self.collectionView.reloadData()
-        }
-    }
+    // Data Sources
+    private var poseterData = PosterModel.dummy()
+    private var movieData = MovieModel.dummy()
+    private var liveData = [DailyBoxOfficeList]()
     
     // MARK: - viewDidLoad
     override func viewDidLoad() {
@@ -59,8 +44,8 @@ final class MainViewController: UIViewController {
         setSegmentedControlLayout()
         setLayout()
         setupCollectionView()
+        setupBinding()
     }
-    
     
     // MARK: - SetLayout
     private func setLayout() {
@@ -93,6 +78,23 @@ final class MainViewController: UIViewController {
         
         
         mainHeaderSegmentedControl = MainHeaderSegmentedControl(items: items, underbarInfo: underbarInfo)
+    }
+    
+    // MARK: - SetBinding
+    private func setupBinding() {
+        let yesterdayDate = yesterdayDateFormattedKST()
+        let trigger = Observable.just(BoxOfficeResult(date: yesterdayDate, itemsPerPage: 6, multiMovieYn: "Y", repNationCd: "K"))
+        
+        let input = LiveViewModel.Input(getDailyBoxOfficeTrigger: trigger)
+        let output = liveViewModel.transform(input)
+        
+        output.dailyBoxOffice
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] data in
+                self?.liveData = data
+                self?.collectionView.reloadData()
+            })
+            .disposed(by: disposeBag)
     }
     
     
@@ -324,7 +326,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
             case .recommendInTiving:
                 title = "티빙에서 꼭 봐야하는 콘텐츠"
             case .popularLiveChannel:
-                title = "인기 LIVE 채널"
+                title = "어제 인기 박스오피스"
             case .popularSeries:
                 title = "1화 무료! 파라마운트+ 인기 시리즈"
             case .mysteriousMovie:
@@ -410,5 +412,21 @@ extension MainViewController: BigPosterCollectionViewDelegate {
     func didChangePage(to index: Int) {
         let indexPath = IndexPath(item: index, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+    }
+}
+
+extension MainViewController {
+    func yesterdayDateFormattedKST() -> Int {
+        var calendar = Calendar.current
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul") ?? calendar.timeZone
+
+        let currentDate = Date()
+        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: currentDate) else { return 0 }
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = calendar.timeZone
+        dateFormatter.dateFormat = "yyyyMMdd"
+
+        return Int(dateFormatter.string(from: yesterday)) ?? 0
     }
 }
